@@ -1,4 +1,4 @@
-# Petroleum Supply Hub 🛢️
+# GAIA.AI 🛢️
 
 **Autonomous Petroleum Equipment & Data Acquisition System**
 
