@@ -1,0 +1,15 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.bak
+
+# Proprietary Data
+petrohub.db
+*.sqlite3
+
+# Environment
+.env
+venv/
+env/
+.venv/
