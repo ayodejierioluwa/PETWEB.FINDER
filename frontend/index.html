@@ -5,19 +5,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetroHub | Advanced Supply Network</title>
+    <title>PetroHub | Industrial Intelligence</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #090a0f;
-            --bg-panel: rgba(18, 20, 28, 0.6);
-            --border-glow: rgba(56, 189, 248, 0.15);
+            --bg-dark: #05060b;
+            --bg-panel: rgba(13, 16, 24, 0.75);
+            --border-glow: rgba(56, 189, 248, 0.25);
             --accent-primary: #0ea5e9;
-            --accent-hover: #0284c7;
+            --accent-hover: #38bdf8;
             --accent-success: #10b981;
             --accent-warning: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.04);
         }
 
         * {
@@ -30,435 +31,831 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+                radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
             color: var(--text-main);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 1400px;
-            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2.5rem;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 3rem;
         }
 
+        /* Header & Navigation */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
+            padding: 1.5rem 3rem;
             background: var(--bg-panel);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 32px;
+            z-index: 9999999 !important;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            pointer-events: auto !important;
+            margin-bottom: 2rem;
         }
 
         .logo-wrap {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .logo-icon {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #0ea5e9, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            font-weight: 900;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
         }
 
-        .subtitle {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .cart-trigger {
+            position: relative;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--glass);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: white;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            z-index: 10000;
+        }
+
+        /* Number Input Hard Reset */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            color: white !important;
+            opacity: 1 !important;
+        }
+
+        .qty-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--accent-primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover { background: var(--accent-primary); color: black; }
+
+        .cart-trigger:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.08);
+            border-color: var(--accent-primary);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 2px solid var(--bg-dark);
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.4);
         }
 
         /* Search Section */
         .search-module {
             background: var(--bg-panel);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            padding: 2.5rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 40px;
+            padding: 3.5rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
         }
 
         .search-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 2.2rem;
+            font-weight: 900;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--text-main);
+            gap: 1rem;
+            letter-spacing: -0.5px;
         }
 
         .controls-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.8rem;
         }
 
         .input-group label {
             font-size: 0.85rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
+            letter-spacing: 2px;
+            font-weight: 800;
         }
 
         input, select {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
+            padding: 1.4rem;
+            border-radius: 20px;
             color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             outline: none;
         }
 
         input:focus, select:focus {
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
-            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.2);
+            background: rgba(0, 0, 0, 0.7);
         }
 
-        button.btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+        .btn-search {
+            background: linear-gradient(135deg, #0ea5e9, #6366f1);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 1.4rem 3rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            letter-spacing: 0.5px;
+            gap: 1rem;
+            align-self: flex-end;
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.35);
         }
 
-        button.btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
-        }
-
-        button.btn-primary:active {
-            transform: translateY(1px);
-        }
-
-        /* Results Status */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1rem;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .status-metric {
-            display: flex;
-            align-items: baseline;
-            gap: 0.5rem;
-        }
-
-        .status-metric span.highlight {
-            color: var(--accent-primary);
-            font-weight: 600;
-            font-size: 1.2rem;
+        .btn-search:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.5);
+            filter: brightness(1.1);
         }
 
         /* Results Grid */
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 2.5rem;
         }
 
         .card {
             background: var(--bg-panel);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--border-glow);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 36px;
+            padding: 0;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.03);
+            border-color: rgba(14, 165, 233, 0.6);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(14, 165, 233, 0.15);
+        }
+
+        .card-image-wrap {
+            height: 260px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.15);
+        }
+
+        .category-tag {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .card-body {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.8rem;
+            font-weight: 850;
+            color: white;
+            letter-spacing: -0.5px;
+            line-height:1.2;
+        }
+
+        .vendor-info-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .vendor-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-hover);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .location-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+        }
+
+        .trusted-by-strip {
+            display: flex;
+            gap: 0.6rem;
+            overflow: hidden;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .partner-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 0.2rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.8rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.15);
+        }
+
+        .price-val {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent-success);
+        }
+
+        /* Modal View */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(30px);
+            z-index: 3000000;
+            justify-content: center;
+            align-items: center;
+            padding: 5rem 2rem;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 48px;
+            max-width: 1100px;
+            width: 100%;
+            max-height: 85vh;
+            position: relative;
+            display: flex; /* Flex is more reliable for nested scrolling */
+            flex-direction: row;
+            box-shadow: 0 60px 150px rgba(0,0,0,0.9);
+            animation: modalIn 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow-y: auto; /* Enable scroll on the main card */
+            margin-top: 40px; 
+        }
+
+        /* Custom Scrollbar for Modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 10px;
+        }
+
+        @keyframes modalIn {
+            from { transform: translateY(50px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 1000px) {
+            .modal-content { grid-template-columns: 1fr; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 2.5rem; right: 2.5rem;
+            font-size: 2.2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            z-index: 5000000;
+            background: rgba(0,0,0,0.3);
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-close:hover { color: white; background: #ef4444; }
+
+        .modal-image-col {
+            flex: 1.2;
+            min-height: 500px;
+        }
+
+        .modal-image-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-details-col {
+            flex: 1;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .specs-pane {
+            background: rgba(0,0,0,0.4);
+            padding: 2rem;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .partnership-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .partner-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-add-cart {
+            background: linear-gradient(135deg, var(--accent-success), #059669);
+            color: white;
+            border: none;
+            padding: 1.8rem;
+            border-radius: 24px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-top: 1rem;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-add-cart:hover {
+            transform: scale(1.02) translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -550px; top: 0; width: 500px; height: 100%;
+            background: rgba(10, 12, 18, 0.95);
+            backdrop-filter: blur(50px) saturate(180%);
+            border-left: 1px solid var(--border-glow);
+            z-index: 10000000 !important;
+            transition: right 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            padding: 4rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -50px 0 100px rgba(0,0,0,0.9);
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        /* Market Pulse Ticker - Normal Flow */
+        .market-pulse-wrap {
+            width: 100%;
+            height: 35px;
+            background: #05070a;
+            border-bottom: 1px solid rgba(14, 165, 233, 0.3);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+            margin-bottom: 1rem;
+        }
+
+        .ticker-move {
+            display: flex;
+            gap: 10rem;
+            padding-left: 2rem;
+            white-space: nowrap;
+            animation: marqueeContinuous 60s linear infinite;
+        }
+
+        @keyframes marqueeContinuous {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .pulse-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tactical Map */
+        .tactical-map {
+            width: 100%;
+            height: 220px;
+            background: #05070a;
+            border-radius: 18px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, var(--accent-primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
+        .map-line {
+            stroke: var(--accent-primary);
+            stroke-width: 2;
+            stroke-dasharray: 8;
+            animation: dash 3s linear infinite;
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(14, 165, 233, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(14, 165, 233, 0.1);
+        @keyframes dash {
+            to { stroke-dashoffset: -100; }
         }
 
-        .card:hover::before {
-            opacity: 1;
+        .map-node {
+            fill: var(--accent-primary);
+            filter: drop-shadow(0 0 5px var(--accent-primary));
         }
 
-        /* Card Content Hierarchy */
-        .card-header {
+        .cart-item {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            gap: 1.5rem;
+            background: rgba(255,255,255,0.04);
+            padding: 1.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            align-items: center;
+            transition: all 0.3s;
         }
 
-        .product-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+        .cart-item:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-primary); }
+
+        .cart-item-img {
+            width: 85px; height: 85px;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 3rem;
+            right: 3rem;
+            background: var(--accent-success);
             color: white;
-            line-height: 1.2;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-category {
-            font-size: 0.85rem;
-            color: var(--accent-primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            display: inline-block;
-            background: rgba(14, 165, 233, 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 6px;
-        }
-
-        .price-tag {
-            font-size: 1.6rem;
+            padding: 1.5rem 2.5rem;
+            border-radius: 24px;
             font-weight: 800;
-            color: var(--accent-success);
-            text-align: right;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            transform: translateY(200%);
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 3000;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            display: flex; align-items: center; gap: 1rem;
         }
 
-        .specs-text {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            background: rgba(0,0,0,0.2);
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 3px solid rgba(255,255,255,0.1);
-        }
+        #toast.active { transform: translateY(0); }
 
-        .vendor-section {
-            margin-top: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .vendor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .vendor-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .vendor-location {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .metrics-row {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .metric-badge {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .metric-badge.trust {
-            border-color: rgba(56, 189, 248, 0.3);
-            color: #38bdf8;
-        }
-
-        .metric-badge.sales {
-            color: var(--accent-warning);
-        }
-
-        .partnerships {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .partner-tag {
-            background: rgba(255,255,255,0.05);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-        }
-
+        /* General Loader */
         .loader {
             display: none;
             text-align: center;
-            padding: 3rem;
+            padding: 8rem;
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--accent-primary);
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .loader.active {
-            display: block;
-            animation: pulse 1.5s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.5; transform: scale(0.98); }
+        .loader.active { display: block; animation: pulseGlow 2s infinite ease-in-out; }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(0.98); color: var(--accent-primary); }
+            50% { opacity: 1; transform: scale(1); color: #818cf8; }
         }
 
-        @media (max-width: 768px) {
-            .results-grid { grid-template-columns: 1fr; }
-            .card { padding: 1.5rem; }
-        }
     </style>
 </head>
 <body>
+    <div class="market-pulse-wrap" id="marketPulse">
+        <div class="ticker-move" id="tickerItems">
+            <!-- Ticker items injected -->
+        </div>
+    </div>
+
+    <!-- Top-Level Sidebars for guaranteed Z-Index priority -->
+    <div id="ordersPane" class="cart-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <h2 style="font-size: 1.8rem;">Tactical Tracking</h2>
+            <div class="cart-close" onclick="toggleOrders()" style="cursor: pointer; font-size: 2rem;">✕</div>
+        </div>
+        <div class="tactical-map" id="mapView"></div>
+        <div id="ordersList" style="flex-grow: 1; overflow-y: auto;"></div>
+    </div>
+
+    <div class="cart-sidebar" id="cartPane">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.8rem; font-weight: 900;">Strategic Cart</h2>
+            <div class="cart-close" onclick="toggleCart()" style="cursor: pointer; font-size: 2rem;">✕</div>
+        </div>
+        <div id="cartItems" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 2rem;"></div>
+        <div id="oracleInsights" style="background:rgba(14,165,233,0.05); padding:1.5rem; border-radius:15px; margin-bottom:2rem; font-size:0.9rem; border:1px solid rgba(14,165,233,0.1);">
+            <div style="color:var(--accent-primary); font-weight:900; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;">Oracle Intelligence</div>
+            <div id="oracleLoading">Analyzing Logistics...</div>
+        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+            <div id="cartTotal" style="font-size: 2rem; font-weight: 900; margin-bottom: 2rem;">Total: $0.00</div>
+            <button class="btn-search" style="width: 100%; padding: 1.8rem;" onclick="openCheckout()">INITIALIZE PROCUREMENT</button>
+        </div>
+    </div>
+
+    <div class="cart-sidebar" id="receiptsPane">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <h2 style="font-size: 1.8rem; font-weight: 900;">Procurement Archive</h2>
+                <div style="color: var(--accent-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; margin-top: 5px;">Historical Audit Trail</div>
+            </div>
+            <div class="cart-close" onclick="toggleReceipts()" style="cursor: pointer; font-size: 2rem;">✕</div>
+        </div>
+        <div id="receiptsList" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Receipts injected here -->
+        </div>
+    </div>
+
+    <div id="toast">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Successfully added to network procurement
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal()" style="position:fixed; top:2rem; right:2rem;">✕</div>
+            <div id="modalContent" style="display:flex; width:100%;"></div>
+        </div>
+    </div>
+
+    <!-- Procurement Command Center (Checkout Modal) -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content" style="max-width: 900px; padding: 4rem; display: flex; flex-direction: column; gap: 2rem; border: 2px solid var(--accent-primary); background: rgba(10, 12, 18, 0.98);">
+            <div class="modal-close" onclick="closeCheckout()" style="position:fixed; top:2rem; right:2rem;">✕</div>
+            
+            <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+                <h2 style="font-size: 3.2rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 0.5rem; color: white;">Procurement Command</h2>
+                <div style="color: var(--accent-primary); font-weight: 900; text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem;">Node Activation & Global Dispatch Protocol</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem;">
+                <div class="form-side">
+                    <div class="input-group" style="margin-bottom: 2.5rem;">
+                        <label style="font-size: 0.8rem; color: var(--accent-primary); text-transform: uppercase; font-weight: 900; letter-spacing: 1px; margin-bottom: 0.8rem; display: block;">Client Identity Node</label>
+                        <input type="text" id="clientName" placeholder="Specify Client or Project Node" style="width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.1rem; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--accent-primary)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label style="font-size: 0.8rem; color: var(--accent-primary); text-transform: uppercase; font-weight: 900; letter-spacing: 1px; margin-bottom: 0.8rem; display: block;">Strategic Destination Hub</label>
+                        <input type="text" id="destinationHub" placeholder="e.g. Onne Port, Nigeria" style="width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.1rem; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--accent-primary)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                    </div>
+                </div>
+
+                <div class="summary-side" style="background: rgba(14, 165, 233, 0.05); padding: 2.5rem; border-radius: 32px; border: 1px solid rgba(14, 165, 233, 0.2); box-shadow: inset 0 0 20px rgba(0,0,0,0.4);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; color: white; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">Order Manifest Summary</h3>
+                    <div id="checkoutSummary" style="font-size: 0.95rem; color: var(--text-main); line-height: 1.8; max-height: 250px; overflow-y: auto; margin-bottom: 1.5rem; padding-right: 1rem;">
+                        <!-- Summary injected via JS -->
+                    </div>
+                    <div id="checkoutTotal" style="font-size: 1.8rem; font-weight: 900; color: white; text-align: right; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.2rem;">
+                        Total: $0.00
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-search" style="width: 100%; padding: 2.2rem; font-size: 1.5rem; margin-top: 1rem; border-radius: 20px; box-shadow: 0 15px 40px rgba(14, 165, 233, 0.3);" onclick="processCheckout(event)">INITIALIZE GLOBAL DISPATCH</button>
+            <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">By clicking Dispatch, you authorize the generation of formal Purchase Orders to selected vendor nodes.</p>
+        </div>
+    </div>
+
+
+
 
     <div class="container">
-        
         <header>
             <div class="logo-wrap">
                 <div class="logo-icon">▲</div>
                 <div>
-                    <h1>PetroHub</h1>
-                    <div class="subtitle">Autonomous Intelligence</div>
+                    <h1 style="font-weight: 900; letter-spacing: -1px; font-size: 2.2rem;">PetroHub</h1>
+                    <div style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 900; text-transform:uppercase; letter-spacing:2px;">Global Intelligence Stack</div>
                 </div>
             </div>
-            <div>
-                <span style="color:var(--text-muted); font-size:0.9rem;">Intelligence Engine: <span style="color:var(--accent-success);">Online</span></span>
+            
+            <div class="nav-actions">
+                <div style="text-align:right;">
+                    <div style="color:var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform:uppercase; letter-spacing:1px;">Network Node</div>
+                    <div style="color:var(--accent-success); font-weight: 900; font-size: 1.05rem;">Active & Optimized</div>
+                </div>
+                <div style="display:flex; gap:1rem; align-items:center;">
+                    <button class="cart-trigger" onclick="toggleReceipts()" style="background:rgba(255,255,255,0.05); color:white; border:1px solid rgba(255,255,255,0.1); cursor:pointer !important;">
+                        🧾 Archive
+                    </button>
+                    <button class="cart-trigger" onclick="toggleOrders()" style="background:var(--accent-primary); color:black; cursor:pointer !important;">
+                        📦 Tracking
+                    </button>
+                    <button class="cart-trigger" onclick="toggleCart()" style="background:var(--accent-primary); color:black; cursor:pointer !important;">
+                        🛒 Cart <span id="cartCount" style="background:var(--accent-primary); color:black; padding:2px 8px; border-radius:6px; margin-left:5px; font-size:0.75rem;">0</span>
+                    </button>
+                </div>
             </div>
         </header>
 
         <section class="search-module">
             <div class="search-title">
-                <span style="color: var(--accent-primary);">⌖</span> Supply Network Query
+                <span style="color: var(--accent-primary);">⌖</span> Cognitive Supply Scan
             </div>
             
             <div class="controls-grid">
                 <div class="input-group">
                     <label>Resource Keyword</label>
-                    <input type="text" id="query" placeholder="e.g. Casing Pipe, ESP, Mud">
+                    <input type="text" id="query" placeholder="e.g. Baryte, Casing, Mud">
                 </div>
                 
                 <div class="input-group">
-                    <label>Category Filter</label>
+                    <label>Strategic Region</label>
+                    <input type="text" id="country" list="countryList" placeholder="Select Country/State">
+                    <datalist id="countryList"></datalist>
+                </div>
+
+                <div class="input-group">
+                    <label>Resource Class</label>
                     <select id="category">
-                        <option value="">All Categories</option>
+                        <option value="">Full Spectrum</option>
+                        <option value="Baryte Mineral">Baryte Mineral</option>
+                        <option value="Drilling Materials">Drilling Materials</option>
                         <option value="Well Construction">Well Construction</option>
                         <option value="Drilling Equipment">Drilling Equipment</option>
                         <option value="Production Equipment">Production Equipment</option>
-                        <option value="Drilling Fluids">Drilling Fluids</option>
                         <option value="Well Control">Well Control</option>
                     </select>
                 </div>
                 
                 <div class="input-group">
-                    <label>Max Budget Cap (USD)</label>
-                    <input type="number" id="budget" placeholder="e.g. 500100" min="0">
+                    <label>Budget Optimization (USD)</label>
+                    <input type="number" id="budget" placeholder="Max Threshold" min="0">
                 </div>
                 
                 <div class="input-group" style="justify-content: flex-end;">
-                    <button class="btn-primary" onclick="executeSearch()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        Execute Scan
+                    <button class="btn-search" onclick="executeSearch()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        Initiate Global Scan
                     </button>
                 </div>
             </div>
         </section>
 
         <div class="status-bar" id="statusBar" style="display: none;">
-            <div class="status-metric">Identified <span class="highlight" id="resCount">0</span> resources</div>
-            <div class="status-metric" style="color: var(--text-muted); font-size: 0.85rem;">Sorted by Vendor Trust Score Index</div>
+            <div style="font-size:1.1rem; font-weight: 800;">Identified <span style="color:var(--accent-primary);" id="resCount">0</span> Strategic Assets</div>
+            <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 800; text-transform:uppercase; letter-spacing:1px;">Real-Time Index: <span style="color: var(--accent-success);">Synchronized</span></div>
         </div>
 
         <div id="loader" class="loader">
-            Synthesizing Network Data...
+            Synthesizing Global Supply Networks...
         </div>
 
-        <div class="results-grid" id="resultsGrid">
-            <!-- Results injected here -->
-        </div>
+        <div class="results-grid" id="resultsGrid"></div>
 
     </div>
 
     <script>
-        // Init database on first load simply to ensure it's seeded
-        fetch('http://localhost:5001/api/init', { method: 'POST' }).catch(e => console.log('Init check...'));
+        const API_HOST = window.location.hostname || 'localhost';
+        const API_BASE = `http://${API_HOST}:5003/api`;
+        let currentResults = [];
+
+        window.addEventListener('load', async () => {
+            loadCountries();
+            updateCartUI();
+        });
+
+        async function loadCountries() {
+            try {
+                const res = await fetch(`${API_BASE}/countries`);
+                const countries = await res.json();
+                const list = document.getElementById('countryList');
+                list.innerHTML = countries.map(c => `<option value="${c}">${c}</option>`).join('');
+            } catch (e) { console.error("Countries load failed"); }
+        }
 
         async function executeSearch() {
             const query = document.getElementById('query').value;
             const category = document.getElementById('category').value;
+            const country = document.getElementById('country').value;
             const budgetVal = document.getElementById('budget').value;
             
             const payload = {
                 query: query,
                 category: category,
+                country: country,
                 budget: budgetVal ? parseFloat(budgetVal) : null
             };
 
@@ -471,7 +868,7 @@
             loader.classList.add('active');
 
             try {
-                const response = await fetch('http://localhost:5001/api/search', {
+                const response = await fetch(`${API_BASE}/search`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -479,91 +876,583 @@
                 
                 const data = await response.json();
                 loader.classList.remove('active');
+                currentResults = data.results || [];
                 
-                if (data.results && data.results.length > 0) {
+                if (currentResults.length > 0) {
                     statusBar.style.display = 'flex';
                     document.getElementById('resCount').textContent = data.count;
-                    renderResults(data.results);
+                    renderResults(currentResults);
                 } else {
-                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted); font-size: 1.2rem;">No logistics matched the required parameters. Maintain budget or broaden search vector.</div>';
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 10rem; color: var(--text-muted); font-size: 1.4rem; font-weight: 700;">Zero matches identified in the requested vector. Broaden search criteria.</div>';
                 }
             } catch (err) {
-                console.error(err);
                 loader.classList.remove('active');
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #ef4444; font-size: 1.2rem;">Backend Server Not Found. Ensure Flask is running on port 5001.</div>';
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #ef4444;">Core Synchronization Failure. API Unreachable.</div>';
             }
         }
+
 
         function renderResults(results) {
             const grid = document.getElementById('resultsGrid');
-            
-            results.forEach((item, index) => {
-                const product = item.product;
-                const vendor = item.vendor;
+            grid.innerHTML = results.map((item, idx) => {
+                const p = item.product;
+                const v = item.vendor;
+                const price_formatted = p.price_min >= 1000000 ? (p.price_min/1000000).toFixed(1) + 'M' : 
+                                        p.price_min >= 1000 ? (p.price_min/1000).toFixed(1) + 'k' : p.price_min.toFixed(2);
                 
-                // Format price concisely
-                const pMin = product.price_min >= 1000 ? (product.price_min/1000).toFixed(1) + 'k' : product.price_min;
-                const pMax = product.price_max >= 1000 ? (product.price_max/1000).toFixed(1) + 'k' : product.price_max;
-                
-                // Build partnerships HTML
-                let partnersHtml = '';
-                if(vendor.partnerships && vendor.partnerships.length > 0) {
-                    partnersHtml = `<div class="partnerships">
-                        <span>Trusted by:</span>
-                        ${vendor.partnerships.map(p => `<span class="partner-tag">${p}</span>`).join('')}
-                    </div>`;
-                } else {
-                    partnersHtml = `<div class="partnerships" style="color: rgba(255,255,255,0.2);">No major partnerships verified</div>`;
-                }
+                // First 3 partners for the card
+                const partnersHtml = v.partnerships.slice(0, 3).map(pt => `<span class="partner-pill">${pt}</span>`).join('');
 
-                // Append card
-                grid.innerHTML += `
-                    <div class="card" style="animation: pulse 0.5s ${index * 0.1}s backwards ease-out;">
-                        <div class="card-header">
-                            <div>
-                                <div class="product-category">${product.category}</div>
-                                <h3 class="product-title">${product.name}</h3>
-                            </div>
-                            <div class="price-tag">$${pMin}</div>
+                const isLocal = v.country === "Nigeria";
+                return `
+                    <div class="card" style="animation: modalIn ${0.3 + (idx * 0.05)}s ease-out backwards;">
+                        <div class="card-image-wrap" onclick="openModal(${idx})">
+                            <img src="${p.image_url}" class="card-image" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80'">
+                            <div class="category-tag">${p.category}</div>
+                            ${p.tech_spec ? `<div style="position:absolute; top:20px; right:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(10px); color:var(--accent-hover); padding:0.4rem 1rem; border-radius:12px; font-weight:800; border:1px solid var(--accent-hover); font-size:0.8rem; box-shadow:0 10px 20px rgba(0,0,0,0.3);">${p.tech_spec}</div>` : ''}
                         </div>
-                        
-                        <div class="specs-text">
-                            ${product.specifications}
+                        <div class="card-body">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <h3 class="product-title" onclick="openModal(${idx})">${p.name}</h3>
+                                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.7rem; color:var(--text-muted); cursor:pointer;">
+                                    <input type="checkbox" onchange="toggleCompare(${idx})" style="width:16px; height:16px;"> Compare
+                                </label>
+                            </div>
+                            <div class="vendor-info-row">
+                                <span class="vendor-name" style="display:flex; justify-content:space-between;">
+                                    <span>🏢 ${v.name}</span>
+                                    ${isLocal ? `<span style="font-size:0.7rem; background:rgba(16,185,129,0.2); color:var(--accent-success); padding:2px 8px; border-radius:4px; border:1px solid var(--accent-success);">NCDMB VERIFIED</span>` : ''}
+                                </span>
+                                <span class="location-text">📍 ${v.location}, ${v.country}</span>
+                            </div>
+                            <div style="display:flex; gap:1.5rem; margin: 0.5rem 0;">
+                                <div style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 700;">🚛 Lead Time: ${p.lead_time_days}d</div>
+                                <div style="font-size: 0.75rem; color: var(--accent-hover); font-weight: 700;">🇳🇬 Local Content: ${v.local_content_value}%</div>
+                            </div>
                         </div>
-                        
-                        <div class="vendor-section">
-                            <div class="vendor-header">
-                                <div class="vendor-name">🏢 ${vendor.name}</div>
-                                <div class="vendor-location">📍 ${vendor.location}</div>
-                            </div>
-                            
-                            <div class="metrics-row">
-                                <div class="metric-badge trust">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                    Trust Score: ${vendor.trust_score.toFixed(1)}/100
-                                </div>
-                                <div class="metric-badge sales">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                                    Sales Vol: ${vendor.total_sales_volume}k
-                                </div>
-                                <div class="metric-badge" style="color:#a8a29e;">
-                                    ⭐ ${vendor.rating.toFixed(1)} Rating
-                                </div>
-                            </div>
-                            
-                            ${partnersHtml}
+                        <div class="card-footer" onclick="openModal(${idx})">
+                            <div class="price-val">$${price_formatted} <span style="font-size:0.8rem; color:var(--text-muted); font-weight:500;">/ ${p.unit}</span></div>
+                            <div style="background:var(--accent-warning); color:black; padding:0.3rem 0.8rem; border-radius:10px; font-weight:900; font-size: 0.9rem;">⭐ ${v.rating.toFixed(1)}</div>
                         </div>
                     </div>
                 `;
-            });
+            }).join('');
         }
-        
-        // Listen for Enter key
-        document.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') {
-                executeSearch();
+
+        async function processCheckout(event) {
+            const clientName = document.getElementById('clientName').value;
+            const destination = document.getElementById('destinationHub').value;
+            const btn = event.target;
+            
+            if (!clientName || !destination) {
+                alert("Procurement Protocol: Please specify Client Identity and Strategic Destination.");
+                return;
             }
+
+            const originalText = btn.textContent;
+            btn.textContent = "⚙️ ACTIVATING NODES...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/checkout`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ client_name: clientName, destination: destination })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.status === 'success') {
+                    showToast(); 
+                    
+                    // Immediate Receipt Generation
+                    const receiptWindow = window.open('', '_blank');
+                    receiptWindow.document.write(generateReceiptHTML(data.order));
+                    receiptWindow.document.close();
+
+                    closeCheckout();
+                    updateCartUI();
+                    
+                    setTimeout(() => {
+                        toggleOrders();
+                    }, 800);
+                } else {
+                    throw new Error(data.error || "Dispatch synchronization failure");
+                }
+            } catch (err) {
+                alert("Network Fault: " + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function generateReceiptHTML(order) {
+            return `
+                <html>
+                <head>
+                    <title>PetroHub Procurement Receipt - ${order.id}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; padding: 40px; color: #333; }
+                        .header { border-bottom: 2px solid #0ea5e3; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; }
+                        .title { font-size: 24px; font-weight: 900; text-transform: uppercase; }
+                        .meta { text-align: right; font-size: 14px; }
+                        table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+                        th { text-align: left; background: #f8f9fa; padding: 12px; border-bottom: 2px solid #eee; }
+                        td { padding: 12px; border-bottom: 1px solid #eee; }
+                        .total { text-align: right; font-size: 20px; font-weight: 800; color: #0ea5e3; }
+                        .footer { margin-top: 50px; font-size: 12px; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div>
+                            <div class="title">PetroHub Procurement Node</div>
+                            <div>Global Logistics & Supply Chain</div>
+                        </div>
+                        <div class="meta">
+                            <div>Order ID: ORD-${order.id.toString().padStart(4, '0')}</div>
+                            <div>Date: ${new Date().toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Client:</strong> ${order.client_name}<br>
+                        <strong>Destination:</strong> ${order.destination}
+                    </div>
+                    <table>
+                        <thead>
+                            <tr><th>Item Description</th><th>Vendor</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr>
+                        </thead>
+                        <tbody>
+                            ${order.items.map(i => `
+                                <tr>
+                                    <td>${i.product_name}</td>
+                                    <td>${i.vendor_name}</td>
+                                    <td>${i.quantity}</td>
+                                    <td>$${i.price.toLocaleString()}</td>
+                                    <td>$${(i.price * i.quantity).toLocaleString()}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <div class="total">Network Total: $${order.total_amount.toLocaleString()}</div>
+                    <div class="footer">
+                        This is an autonomous procurement record generated by the PetroHub Intelligence Network.<br>
+                        The respective vendors have been notified via secure API dispatch.
+                    </div>
+                    <script>window.print();<\/script>
+                </body>
+                </html>
+            `;
+        }
+
+        async function updateMarketPulse() {
+            try {
+                const res = await fetch(`${API_BASE}/market-pulse`);
+                const data = await res.json();
+                const ticker = document.getElementById('tickerItems');
+                // Create a repeated string for infinite marquee
+                const content = data.map(item => `
+                    <div class="pulse-item">
+                        <span style="opacity:0.6; color:var(--text-muted);">${item.label}:</span>
+                        <span style="color:white;">${item.value}</span>
+                        <span style="color:${item.trend.includes('+') ? '#10b981' : '#ef4444'}">${item.trend}</span>
+                    </div>
+                `).join('');
+                ticker.innerHTML = content + content + content + content; 
+            } catch (e) { console.error("Ticker failed", e); }
+        }
+
+        async function updateOracle() {
+            try {
+                const res = await fetch(`${API_BASE}/optimize`);
+                const data = await res.json();
+                const el = document.getElementById('oracleInsights');
+                el.innerHTML = data.insights.map(i => `<div style="margin-bottom:0.6rem; display:flex; gap:0.5rem;"><span>▸</span> ${i}</div>`).join('');
+            } catch (e) {}
+        }
+
+        function toggleOrders() {
+            const pane = document.getElementById('ordersPane');
+            if (!pane) { alert("System Error: Orders Pane missing"); return; }
+            pane.classList.toggle('active');
+            if (pane.classList.contains('active')) {
+                loadOrders();
+                renderTacticalMap();
+            }
+        }
+
+        function renderTacticalMap() {
+            const map = document.getElementById('mapView');
+            map.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 400 220" style="background:#020408;">
+                    <!-- Static Grid -->
+                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+                    </pattern>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                    
+                    <!-- Supply Route -->
+                    <circle cx="50" cy="180" r="4" class="map-node" />
+                    <text x="40" y="200" fill="white" font-size="8" font-weight="800">VENDOR HUB (TX/NG/NO)</text>
+                    
+                    <path d="M 50 180 Q 200 50 350 100" fill="none" class="map-line" id="routePath" />
+                    
+                    <circle cx="350" cy="100" r="6" fill="var(--accent-hover)" />
+                    <text x="310" y="125" fill="var(--accent-hover)" font-size="9" font-weight="900">STRATEGIC DESTINATION</text>
+                    
+                    <!-- Animated Pulse -->
+                    <circle r="3" fill="white">
+                        <animateMotion dur="4s" repeatCount="indefinite" path="M 50 180 Q 200 50 350 100" />
+                    </circle>
+                </svg>
+            `;
+        }
+
+        let compareList = [];
+        function toggleCompare(idx) {
+            const item = currentResults[idx];
+            const foundIdx = compareList.findIndex(c => c.product.id === item.product.id);
+            if (foundIdx > -1) compareList.splice(foundIdx, 1);
+            else compareList.push(item);
+            
+            if (compareList.length >= 1) showCompareBar();
+            else hideCompareBar();
+        }
+
+        function showCompareBar() {
+            let bar = document.getElementById('compareBar');
+            if (!bar) {
+                bar = document.createElement('div');
+                bar.id = 'compareBar';
+                bar.style = "position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); background:var(--accent-primary); color:black; padding:1.2rem 3rem; border-radius:100px; display:flex; gap:2.5rem; align-items:center; z-index:9000; box-shadow:0 30px 60px rgba(0,0,0,0.6); font-weight:900; border:2px solid rgba(255,255,255,0.2); backdrop-filter:blur(10px);";
+                document.body.appendChild(bar);
+            }
+            bar.innerHTML = `
+                <span>⚖️ COMPARISON MODE: ${compareList.length} ITEMS</span>
+                <button onclick="launchComparison()" style="background:white; color:black; border:none; padding:0.5rem 1.5rem; border-radius:50px; font-weight:900; cursor:pointer;">LIFT BATTLE-CARD</button>
+                <div onclick="clearCompare()" style="cursor:pointer; opacity:0.8;">✕</div>
+            `;
+            bar.style.display = 'flex';
+        }
+
+        function hideCompareBar() {
+            const bar = document.getElementById('compareBar');
+            if (bar) bar.style.display = 'none';
+        }
+
+        function clearCompare() {
+            compareList = [];
+            hideCompareBar();
+            searchProducts(); // Refresh to clear checkboxes
+        }
+
+        function launchComparison() {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <div class="modal-close" onclick="closeModal()">✕</div>
+                <div style="padding:4rem; width:100%; max-width:1000px; display:flex; flex-direction:column; gap:3rem;">
+                    <h2 style="font-size:3rem; font-weight:900; text-align:center;">Strategic Battle-Card</h2>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+                        ${compareList.map(c => `
+                            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:30px; overflow:hidden;">
+                                <img src="${c.product.image_url}" style="width:100%; height:250px; object-fit:cover;">
+                                <div style="padding:2rem;">
+                                    <div style="font-size:0.8rem; color:var(--accent-primary); font-weight:900; margin-bottom:0.5rem;">${c.product.category}</div>
+                                    <h3 style="font-size:1.8rem; margin-bottom:1rem;">${c.product.name}</h3>
+                                    <div style="display:grid; gap:0.8rem; font-size:0.9rem;">
+                                        <div style="display:flex; justify-content:space-between;"><span>Vendor:</span><span style="color:white; font-weight:800;">${c.vendor.name}</span></div>
+                                        <div style="display:flex; justify-content:space-between;"><span>NCDMB Score:</span><span style="color:var(--accent-success); font-weight:800;">${c.vendor.local_content_value}%</span></div>
+                                        <div style="display:flex; justify-content:space-between;"><span>Trust Score:</span><span style="color:var(--accent-hover); font-weight:800;">${c.vendor.trust_score}</span></div>
+                                        <div style="display:flex; justify-content:space-between;"><span>Unit Price:</span><span style="color:white; font-weight:900;">$${c.product.price_min.toLocaleString()}</span></div>
+                                        <div style="display:flex; justify-content:space-between;"><span>Lead Time:</span><span style="color:white;">${c.product.lead_time_days} Days</span></div>
+                                    </div>
+                                    <div style="margin-top:2rem; padding:1.5rem; background:rgba(0,0,0,0.3); border-radius:15px; font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
+                                        ${c.product.specifications}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        async function loadOrders() {
+            const res = await fetch(`${API_BASE}/orders`);
+            const orders = await res.json();
+            const list = document.getElementById('ordersList');
+            
+            list.innerHTML = orders.map(o => `
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="font-weight: 800; color: var(--accent-hover);">ORD-${o.id.toString().padStart(4, '0')}</span>
+                        <span style="background: var(--accent-primary); color: black; font-size: 0.7rem; font-weight: 900; padding: 0.2rem 0.6rem; border-radius: 5px; text-transform: uppercase;">${o.status}</span>
+                    </div>
+                    <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem;">👤 ${o.client_name}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">📍 Current: ${o.tracking_location}</div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; font-size: 0.8rem;">
+                        ${o.items.map(i => `<div>• ${i.product_name} (${i.quantity})</div>`).join('')}
+                    </div>
+                    <div style="margin-top: 1rem; font-weight: 800; text-align: right;">$${o.total_amount.toLocaleString()}</div>
+                    <button onclick="downloadReceipt(${o.id})" style="width: 100%; margin-top: 1rem; background: rgba(255,255,255,0.1); border: none; color: white; padding: 0.5rem; border-radius: 5px; font-size: 0.8rem; cursor: pointer;">📄 Download Receipt</button>
+                </div>
+            `).join('');
+        }
+
+        function downloadReceipt(orderId) {
+            alert("Receipt Download Started: PetroHub_Order_" + orderId + ".pdf");
+            // In a real app, this would point to a PDF generator
+        }
+
+        async function openCheckout() {
+            // Close cart first for seamless transition
+            const cartPane = document.getElementById('cartPane');
+            if (cartPane.classList.contains('active')) {
+                cartPane.classList.remove('active');
+            }
+            
+            // Populate summary
+            const res = await fetch(`${API_BASE}/cart`);
+            const cart = await res.json();
+            const summary = document.getElementById('checkoutSummary');
+            const totalEl = document.getElementById('checkoutTotal');
+            
+            if (!summary || !totalEl) return;
+
+            let total = 0;
+            summary.innerHTML = cart.map(item => {
+                const lineTotal = item.product.price_min * item.quantity;
+                total += lineTotal;
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:0.8rem; border-bottom:1px solid rgba(255,255,255,0.03); padding-bottom:0.5rem;">
+                    <div>
+                        <div style="font-weight:800; color:white;">${item.product.name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">Qty: ${item.quantity} × $${item.product.price_min.toLocaleString()}</div>
+                    </div>
+                    <span style="font-weight:900; color:var(--accent-primary);">$${lineTotal.toLocaleString()}</span>
+                </div>`;
+            }).join('');
+            
+            totalEl.textContent = `Total: $${total.toLocaleString()}`;
+            
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        function openModal(idx) {
+            const item = currentResults[idx];
+            const p = item.product;
+            const v = item.vendor;
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modalContent');
+            
+            const partnersHtml = v.partnerships.map(pt => `<span class="partner-pill" style="font-size:0.9rem; padding: 0.5rem 1.2rem; background:rgba(255,255,255,0.08);">${pt}</span>`).join('');
+
+            content.innerHTML = `
+                <div class="modal-image-col">
+                    <img src="${p.image_url}" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80'">
+                </div>
+                <div class="modal-details-col">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:-1rem;">
+                        <div style="font-size:0.9rem; color:var(--accent-primary); font-weight:900; text-transform:uppercase; letter-spacing:2px;">${p.category}</div>
+                        ${p.tech_spec ? `<div style="background:var(--accent-hover); color:black; padding:0.3rem 1rem; border-radius:10px; font-weight:900; font-size:0.9rem;">${p.tech_spec}</div>` : ''}
+                    </div>
+                    <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.1;">${p.name}</h2>
+                    
+                    <div style="display:flex; align-items:center; gap:1.2rem; margin-bottom:0.5rem;">
+                        <span style="font-size: 1.2rem; font-weight: 800; color:var(--accent-hover);">🏢 ${v.name}</span>
+                        <span class="location-text" style="font-size:1rem;">📍 ${v.country}</span>
+                        <span style="background:rgba(255,255,255,0.1); color:white; padding:0.2rem 0.6rem; border-radius:5px; font-size:0.8rem; font-weight:700;">📦 ${p.pack_weight} Pack</span>
+                    </div>
+                    
+                    <div class="specs-pane">
+                        <strong style="color:white; display:block; margin-bottom:0.8rem; font-size:1.1rem;">Engineering Logic & Advantage:</strong>
+                        <div style="color:var(--text-main); font-weight:500;">${p.specifications}</div>
+                    </div>
+
+                    <div class="partnership-box">
+                        <strong style="font-size:0.9rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:800;">Strategy Partners (Patronized By):</strong>
+                        <div class="partner-grid">
+                            ${partnersHtml}
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 2rem; border-top:1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; gap:1.5rem; align-items:center;">
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform:uppercase; font-weight:800;">Node Rate (${p.unit})</div>
+                                <div class="price-val" style="font-size: 2.2rem;">$${p.price_min.toLocaleString()}</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.08); padding:0.8rem 1.2rem; border-radius:15px; display:flex; flex-direction:column; gap:0.4rem; border:1px solid var(--accent-primary);">
+                                <label style="font-size:0.65rem; color:var(--accent-primary); font-weight:900; text-transform:uppercase;">Order Qty</label>
+                                <div style="display:flex; align-items:center; gap:1rem;">
+                                    <button class="qty-btn" onclick="adjustQty(-1)" style="border:none; background:rgba(255,255,255,0.1); width:24px; height:24px; border-radius:4px; color:white; cursor:pointer;">-</button>
+                                    <input type="number" id="orderQty" value="1" min="1" readonly style="background:transparent; border:none; color:white !important; font-size:1.6rem; font-weight:900; width:60px; outline:none; text-align:center; -webkit-text-fill-color: white;">
+                                    <button class="qty-btn" onclick="adjustQty(1)" style="border:none; background:rgba(255,255,255,0.1); width:24px; height:24px; border-radius:4px; color:white; cursor:pointer;">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart(${p.id})" style="padding: 1.2rem 3rem; font-size: 1.2rem; border-radius:15px; background:var(--accent-primary); color:black; font-weight:900; cursor:pointer; border:none; box-shadow:0 10px 30px rgba(14,165,233,0.4);">⚡ DEPLOY TO CART</button>
+                    </div>
+                </div>
+            `;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        async function addToCart(pid) {
+            const qty = document.getElementById('orderQty')?.value || 1;
+            console.log("Procurement commitment initiated for Product ID:", pid, "Quantity:", qty);
+            try {
+                const res = await fetch(`${API_BASE}/cart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: pid, quantity: qty })
+                });
+                if (res.ok) {
+                    showToast();
+                    updateCartUI();
+                    closeModal();
+                } else {
+                    const err = await res.json();
+                    alert("Procurement Node Rejection: " + (err.error || "Network Fault"));
+                }
+            } catch (e) { 
+                console.error("Cart error", e);
+                alert("Critical System Fault: Communication with procurement server lost.");
+            }
+        }
+
+        async function updateCartUI() {
+            try {
+                const res = await fetch(`${API_BASE}/cart`);
+                const cart = await res.json();
+                document.getElementById('cartCount').textContent = cart.length;
+                
+                const list = document.getElementById('cartItems');
+                const totalEl = document.getElementById('cartTotal');
+                
+                if (cart.length === 0) {
+                    list.innerHTML = '<div style="text-align:center; padding: 8rem; color:var(--text-muted); font-size:1.2rem; font-weight:600;">Inventory Empty</div>';
+                    if (totalEl) totalEl.textContent = 'Total: $0.00';
+                    return;
+                }
+                
+                let total = 0;
+                list.innerHTML = cart.map(item => {
+                    total += item.product.price_min * item.quantity;
+                    return `
+                        <div class="cart-item" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; display: flex; align-items: center; gap: 1rem;">
+                            <img src="${item.product.image_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80'">
+                            <div style="flex-grow:1;">
+                                <div style="font-weight: 800; font-size: 0.9rem;">${item.product.name}</div>
+                                <div style="display:flex; gap:1rem; align-items:center;">
+                                    <div style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 700;">$${item.product.price_min.toLocaleString()}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800;">QTY: ${item.quantity}</div>
+                                </div>
+                            </div>
+                            <div onclick="removeFromCart(${item.id})" style="cursor: pointer; opacity: 0.5;">✕</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                if (totalEl) totalEl.textContent = `Total: $${total.toLocaleString()}`;
+            } catch (e) { console.error("Cart UI failed"); }
+        }
+
+        async function removeFromCart(id) {
+            await fetch(`${API_BASE}/cart/${id}`, { method: 'DELETE' });
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const pane = document.getElementById('cartPane');
+            if (!pane) { alert("System Error: Cart Pane missing"); return; }
+            pane.classList.toggle('active');
+            if (pane.classList.contains('active')) {
+                updateCartUI();
+                updateOracle();
+            }
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('active');
+            setTimeout(() => t.classList.remove('active'), 3000);
+        }
+
+        // Initialize Market Pulse
+        updateMarketPulse();
+        setInterval(updateMarketPulse, 60000); // Update every minute
+
+        function adjustQty(v) {
+            const el = document.getElementById('orderQty');
+            let val = parseInt(el.value) + v;
+            if (val < 1) val = 1;
+            el.value = val;
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeModal();
+                document.getElementById('cartPane').classList.remove('active');
+                document.getElementById('ordersPane').classList.remove('active');
+            }
+            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') executeSearch();
         });
+        function toggleReceipts() {
+            const pane = document.getElementById('receiptsPane');
+            if (!pane) return;
+            pane.classList.toggle('active');
+            if (pane.classList.contains('active')) {
+                loadReceiptsArchive();
+            }
+        }
+
+        async function loadReceiptsArchive() {
+            const res = await fetch(`${API_BASE}/orders`);
+            const orders = await res.json();
+            const list = document.getElementById('receiptsList');
+            
+            if (orders.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding: 4rem; color:var(--text-muted); font-weight:800;">No Archive Records Found</div>';
+                return;
+            }
+
+            list.innerHTML = orders.map(o => `
+                <div class="cart-item" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 900; color: white; font-size: 1rem;">#PH-${o.id}</div>
+                            <div style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 800; margin-top: 2px;">${o.timestamp}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 900; color: white;">$${o.total_amount.toLocaleString()}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Confirmed</div>
+                        </div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">DESTINATION:</div>
+                        <div style="font-size: 0.8rem; font-weight: 700; color: white;">${o.destination_hub}</div>
+                    </div>
+                    <button onclick="downloadReceipt(${o.id})" style="width: 100%; padding: 1rem; background: var(--accent-primary); color: black; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.75rem;">
+                        📥 Download Formal PO
+                    </button>
+                </div>
+            `).join('');
+        }
+
     </script>
 </body>
 </html>

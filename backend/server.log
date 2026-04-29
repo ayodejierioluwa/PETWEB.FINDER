@@ -1,0 +1,126 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+ * Running on http://192.168.1.148:5003
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 633-624-332
+127.0.0.1 - - [23/Apr/2026 07:58:51] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:46] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:46] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:46] "GET /api/countries HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:48] "OPTIONS /api/search HTTP/1.1" 200 -
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:64: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  vendor = Vendor.query.get(p.vendor_id)
+127.0.0.1 - - [23/Apr/2026 07:59:48] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:56] "GET /api/optimize HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:56] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 07:59:57] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:00:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:01:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:02:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:03:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:04:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:05:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:06:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:07:30] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:07:30] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:07:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:08:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:09:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:10:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:11:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:12:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:13:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:31] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:31] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:48] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:52] "OPTIONS /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:52] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:52] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:54] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:54] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:57] "OPTIONS /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:57] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:14:57] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:00] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:00] "GET /api/cart HTTP/1.1" 200 -
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:180: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  p = Product.query.get(item.product_id)
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:181: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  v = Vendor.query.get(p.vendor_id)
+127.0.0.1 - - [23/Apr/2026 08:15:01] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:01] "GET /api/optimize HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:03] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:20] "OPTIONS /api/checkout HTTP/1.1" 200 -
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:130: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  product = Product.query.get(c_item.product_id)
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:131: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  vendor = Vendor.query.get(product.vendor_id)
+127.0.0.1 - - [23/Apr/2026 08:15:20] "POST /api/checkout HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:55] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:15:55] "GET /api/market-pulse HTTP/1.1" 200 -
+/Users/macbook/.gemini/antigravity/scratch/PETWEB.FINDER/backend/app.py:160: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if o.status == 'Processing' and (datetime.utcnow() - o.created_at).seconds > 30:
+127.0.0.1 - - [23/Apr/2026 08:15:55] "GET /api/orders HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:16:55] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:17:55] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:18:55] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:19:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:19:38] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:19:38] "GET /api/countries HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:19:40] "GET /api/orders HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:20:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:21:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:22:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:23:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:24:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:25:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:26:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:27:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:28:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:29:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:32:20] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:33:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:34:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:35:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:36:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:37:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:38:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:39:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:40:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:41:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:42:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:43:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:44:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:45:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:46:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:47:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:48:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:49:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:50:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:51:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:52:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:53:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:54:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:55:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:56:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:57:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:58:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 08:59:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:00:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:01:13] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:03:41] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:03:51] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:03:52] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:03:55] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:04:41] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:05:43] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:06:51] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:08:18] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [23/Apr/2026 09:09:38] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [24/Apr/2026 09:51:08] "GET /api/market-pulse HTTP/1.1" 200 -
+127.0.0.1 - - [24/Apr/2026 09:53:06] "GET /api/market-pulse HTTP/1.1" 200 -
