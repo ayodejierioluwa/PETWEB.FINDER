@@ -34,11 +34,36 @@ def init_slate():
 @app.route('/api/search', methods=['POST'])
 def search_products():
     data = request.get_json() or {}
-    query = data.get('query', '').lower()
+    query = data.get('query', '')
     category = data.get('category', '')
     country = data.get('country', '')
     budget_max = data.get('budget', None)
+    live_search = data.get('live_search', False)
     
+    # Hybrid Logic: Trigger live web scrape if requested OR if database has very few matches
+    should_trigger_live = False
+    if query and len(query.strip()) >= 2:
+        if live_search:
+            should_trigger_live = True
+        else:
+            q_lower = query.lower()
+            existing_count = Product.query.filter(
+                Product.name.ilike(f'%{q_lower}%') | 
+                Product.specifications.ilike(f'%{q_lower}%')
+            ).count()
+            if existing_count < 3:
+                should_trigger_live = True
+                
+    if should_trigger_live:
+        print(f"Triggering live web B2B scrape for query: '{query}'")
+        try:
+            engine = ScraperEngine()
+            result = engine.scrape_web_live(query)
+            print(f"Live scrape completed: {result}")
+        except Exception as e:
+            print(f"Error during live scraping run: {e}")
+            
+    # Execute database search to retrieve merged list (seed + newly cached live items)
     products_query = Product.query.join(Vendor)
     
     if query:
@@ -51,8 +76,7 @@ def search_products():
         products_query = products_query.filter(Product.category.ilike(f'%{category}%'))
         
     if country:
-        # Join with Vendor to filter by country
-        products_query = products_query.join(Vendor).filter(Vendor.country.ilike(f'%{country}%'))
+        products_query = products_query.filter(Vendor.country.ilike(f'%{country}%'))
         
     if budget_max is not None and budget_max > 0:
         products_query = products_query.filter(Product.price_min <= budget_max)
@@ -230,4 +254,10 @@ if __name__ == '__main__':
             ScraperEngine().perform_scrape()
             print("Database seeded.")
             
+    @app.after_request
+    def allow_iframes(response):
+        response.headers.remove('X-Frame-Options')
+        response.headers['Content-Security-Policy'] = "frame-ancestors 'self' *"
+        return response
+
     app.run(debug=True, host='0.0.0.0', port=5003)

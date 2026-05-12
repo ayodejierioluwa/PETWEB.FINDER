@@ -239,6 +239,90 @@
             filter: brightness(1.1);
         }
 
+        /* Premium Glow Switch Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background: rgba(10, 15, 25, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            padding: 1.2rem 2rem;
+            border-radius: 20px;
+            align-self: flex-end;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(14, 165, 233, 0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .toggle-container:hover {
+            border-color: rgba(14, 165, 233, 0.45);
+            box-shadow: 0 12px 35px rgba(14, 165, 233, 0.15), inset 0 0 20px rgba(14, 165, 233, 0.1);
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            user-select: none;
+            transition: color 0.4s;
+            flex-grow: 1;
+        }
+
+        .toggle-container:hover .toggle-label {
+            color: white;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #94a3b8;
+            transition: .4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        input:checked + .slider {
+            background-color: rgba(14, 165, 233, 0.2);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.35);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+            background-color: var(--accent-primary);
+        }
+
         /* Results Grid */
         .results-grid {
             display: grid;
@@ -806,6 +890,16 @@
                 </div>
                 
                 <div class="input-group" style="justify-content: flex-end;">
+                    <div class="toggle-container">
+                        <span class="toggle-label">Live Web Scan</span>
+                        <label class="switch">
+                            <input type="checkbox" id="liveSearch" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group" style="justify-content: flex-end;">
                     <button class="btn-search" onclick="executeSearch()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         Initiate Global Scan
@@ -851,12 +945,14 @@
             const category = document.getElementById('category').value;
             const country = document.getElementById('country').value;
             const budgetVal = document.getElementById('budget').value;
+            const liveSearch = document.getElementById('liveSearch').checked;
             
             const payload = {
                 query: query,
                 category: category,
                 country: country,
-                budget: budgetVal ? parseFloat(budgetVal) : null
+                budget: budgetVal ? parseFloat(budgetVal) : null,
+                live_search: liveSearch
             };
 
             const grid = document.getElementById('resultsGrid');
@@ -867,6 +963,28 @@
             statusBar.style.display = 'none';
             loader.classList.add('active');
 
+            let loadingInterval = null;
+            if (liveSearch && query && query.trim().length >= 2) {
+                const messages = [
+                    "Establishing Secure Sat-Link to Global Supplier Networks...",
+                    "Querying Web Indexes, Directories, and Port Portals...",
+                    "Parsing candidate vendor profiles and contact nodes...",
+                    "Extracting engineering specifications & API test sheets...",
+                    "Auditing NCDMB Local Content regulatory compliance...",
+                    "Verifying visual asset integrity with cognitive vision...",
+                    "Synchronizing certified assets into local SQLite vault...",
+                    "Optimizing routing logistics and lead-time projections..."
+                ];
+                let msgIdx = 0;
+                loader.textContent = messages[0];
+                loadingInterval = setInterval(() => {
+                    msgIdx = (msgIdx + 1) % messages.length;
+                    loader.textContent = messages[msgIdx];
+                }, 1800);
+            } else {
+                loader.textContent = "Synthesizing Local Supply Cache...";
+            }
+
             try {
                 const response = await fetch(`${API_BASE}/search`, {
                     method: 'POST',
@@ -875,19 +993,23 @@
                 });
                 
                 const data = await response.json();
-                loader.classList.remove('active');
                 currentResults = data.results || [];
                 
                 if (currentResults.length > 0) {
                     statusBar.style.display = 'flex';
                     document.getElementById('resCount').textContent = data.count;
                     renderResults(currentResults);
+                    loadCountries(); // Refresh countries list in case a new country was added during live search
                 } else {
                     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 10rem; color: var(--text-muted); font-size: 1.4rem; font-weight: 700;">Zero matches identified in the requested vector. Broaden search criteria.</div>';
                 }
             } catch (err) {
-                loader.classList.remove('active');
                 grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #ef4444;">Core Synchronization Failure. API Unreachable.</div>';
+            } finally {
+                if (loadingInterval) {
+                    clearInterval(loadingInterval);
+                }
+                loader.classList.remove('active');
             }
         }
 
