@@ -913,6 +913,14 @@
             <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 800; text-transform:uppercase; letter-spacing:1px;">Real-Time Index: <span style="color: var(--accent-success);">Synchronized</span></div>
         </div>
 
+        <div id="autocorrectBox" style="display: none; background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 12px; padding: 1.2rem 1.8rem; margin: 0 0 2rem 0; font-size: 1rem; color: #e2e8f0; align-items: center; justify-content: space-between; flex-direction: row; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <span style="font-size: 1.3rem; color: var(--accent-primary);">💡</span>
+                <span>Showing results for <strong style="color: var(--accent-primary); cursor: pointer; text-decoration: underline;" id="correctedLink" onclick="applySuggestedQuery()">christmas tree</strong> instead of <span style="text-decoration: line-through; color: var(--text-muted);" id="originalQuery">christmaas tree</span></span>
+            </div>
+            <button onclick="dismissAutocorrect()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">×</button>
+        </div>
+
         <div id="loader" class="loader">
             Synthesizing Global Supply Networks...
         </div>
@@ -995,12 +1003,22 @@
                 const data = await response.json();
                 currentResults = data.results || [];
                 
+                const acBox = document.getElementById('autocorrectBox');
+                if (data.suggestion && data.suggestion.toLowerCase() !== data.original_query.toLowerCase()) {
+                    acBox.style.display = 'flex';
+                    document.getElementById('correctedLink').textContent = data.suggestion;
+                    document.getElementById('originalQuery').textContent = data.original_query;
+                } else {
+                    acBox.style.display = 'none';
+                }
+                
                 if (currentResults.length > 0) {
                     statusBar.style.display = 'flex';
                     document.getElementById('resCount').textContent = data.count;
                     renderResults(currentResults);
                     loadCountries(); // Refresh countries list in case a new country was added during live search
                 } else {
+                    statusBar.style.display = 'none';
                     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 10rem; color: var(--text-muted); font-size: 1.4rem; font-weight: 700;">Zero matches identified in the requested vector. Broaden search criteria.</div>';
                 }
             } catch (err) {
@@ -1011,6 +1029,17 @@
                 }
                 loader.classList.remove('active');
             }
+        }
+
+        function applySuggestedQuery() {
+            const suggestion = document.getElementById('correctedLink').textContent;
+            document.getElementById('query').value = suggestion;
+            document.getElementById('autocorrectBox').style.display = 'none';
+            executeSearch();
+        }
+
+        function dismissAutocorrect() {
+            document.getElementById('autocorrectBox').style.display = 'none';
         }
 
 

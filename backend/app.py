@@ -40,6 +40,47 @@ def search_products():
     budget_max = data.get('budget', None)
     live_search = data.get('live_search', False)
     
+    # Spell-check Auto-correction & Suggestion Core via Built-in difflib
+    import difflib
+    original_query = query
+    suggestion = None
+    
+    possibilities = [
+        "christmas tree", "casing", "bentonite", "baryte", "bop", 
+        "drill pipe", "drillpipe", "caustic soda", "calcium carbonate", "wellhead", 
+        "separator", "valve", "packer", "pump", "cement", "blowout preventer"
+    ]
+    
+    if query and len(query.strip()) >= 3:
+        q_lower = query.lower().strip()
+        # 1. Check for close match on the whole query string
+        close_matches = difflib.get_close_matches(q_lower, possibilities, n=1, cutoff=0.7)
+        if close_matches:
+            matched = close_matches[0]
+            if matched != q_lower:
+                suggestion = matched
+                query = suggestion
+        else:
+            # 2. Check for close matches word-by-word
+            words = q_lower.split()
+            corrected_words = []
+            word_changed = False
+            for w in words:
+                if len(w) >= 4:
+                    match = difflib.get_close_matches(w, possibilities, n=1, cutoff=0.75)
+                    if match:
+                        corrected_words.append(match[0])
+                        word_changed = True
+                    else:
+                        corrected_words.append(w)
+                else:
+                    corrected_words.append(w)
+            if word_changed:
+                possible_corrected = " ".join(corrected_words)
+                if possible_corrected != q_lower:
+                    suggestion = possible_corrected
+                    query = suggestion
+                    
     # Hybrid Logic: Trigger live web scrape if requested OR if database has very few matches
     should_trigger_live = False
     if query and len(query.strip()) >= 2:
@@ -96,7 +137,9 @@ def search_products():
     
     return jsonify({
         "count": len(results),
-        "results": results[:50] 
+        "results": results[:50],
+        "original_query": original_query,
+        "suggestion": suggestion
     })
 
 # --- Cart Endpoints ---
