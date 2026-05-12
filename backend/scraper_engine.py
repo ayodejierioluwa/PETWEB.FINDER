@@ -584,35 +584,46 @@ class ScraperEngine:
         prod_lower = product_name.lower()
         cat_lower = (category or "").lower()
         
-        # Mapping Dictionary for high-fidelity Unsplash engineering/oilfield imagery
+        # Mapping Dictionary for high-fidelity local engineering/oilfield imagery
         assets_map = {
-            "drilling fluids": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
-            "mud": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
-            "baryte": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
-            "bentonite": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
-            "chemical": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+            "drilling fluids": "/assets/img/drilling_chemicals.png",
+            "mud": "/assets/img/drilling_chemicals.png",
+            "baryte": "/assets/img/baryte.png",
+            "bentonite": "/assets/img/bentonite.png",
+            "chemical": "/assets/img/drilling_chemicals.png",
+            "caustic": "/assets/img/caustic_soda.png",
+            "soda": "/assets/img/caustic_soda.png",
+            "carbonate": "/assets/img/calcium_carbonate.png",
+            "calcium": "/assets/img/calcium_carbonate.png",
             
             "well construction": "/assets/img/casing_pipe.png",
             "casing": "/assets/img/casing_pipe.png",
             "pipe": "/assets/img/casing_pipe.png",
+            "tubing": "/assets/img/casing_pipe.png",
             
-            "drilling equipment": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-            "bit": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-            "tricone": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-            "tool": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+            "drilling equipment": "/assets/img/drill_pipe.png",
+            "drill pipe": "/assets/img/drill_pipe.png",
+            "drillpipe": "/assets/img/drillpipe_5dp.png",
+            "bit": "/assets/img/drill_bits.png",
+            "tricone": "/assets/img/drill_bits.png",
+            "tool": "/assets/img/drill_pipe.png",
             
-            "well control": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=800&q=80",
-            "bop": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=800&q=80",
-            "preventer": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=800&q=80",
-            "seal": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=800&q=80",
+            "well control": "/assets/img/bop_stack.png",
+            "bop": "/assets/img/bop_stack.png",
+            "preventer": "/assets/img/bop_stack.png",
+            "seal": "/assets/img/bop_seals.png",
             
-            "production equipment": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-            "separator": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-            "christmas tree": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-            "wellhead": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-            "valve": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+            "production equipment": "/assets/img/separator_3phase.png",
+            "separator": "/assets/img/separator_3phase.png",
+            "christmas tree": "/assets/img/christmas_tree.png",
+            "wellhead": "/assets/img/christmas_tree.png",
+            "valve": "/assets/img/valve_6a.png",
+            "packer": "/assets/img/packers.png",
+            "pump": "/assets/img/esp_pump.png",
+            "esp": "/assets/img/esp_pump.png",
             
-            "cementing": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+            "cementing": "/assets/img/cement_g.png",
+            "cement": "/assets/img/cement_g.png",
         }
         
         # 1. Match by product keywords
@@ -625,5 +636,5 @@ class ScraperEngine:
             if key in cat_lower:
                 return url
                 
-        # Default premium background fall back
-        return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+        # Default premium background fall back (local high-fidelity asset)
+        return "/assets/img/drill_pipe.png"
